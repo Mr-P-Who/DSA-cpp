@@ -9,17 +9,30 @@ public:
     Node(int d = 0) { data = d, next = nullptr; }
 };
 
-bool Floyd_detect_loop(Node *_head)
+Node *Floyd_detect_loop(Node *_head)
 {
+    if (_head == nullptr) // If list is empty
+        return nullptr;
     Node *slow = _head, *fast = _head;
-    while (slow != nullptr && fast != nullptr && fast->next != nullptr)
+    while (fast != nullptr && fast->next != nullptr)
     {
         slow = slow->next;
         fast = fast->next->next;
         if (slow == fast)
-            return true;
+            break;
     }
-    return false;
+    if (fast == nullptr || fast->next == nullptr) // Loop Not Found
+        return nullptr;
+    else
+    {
+        slow = _head;
+        while (slow != fast)
+        {
+            slow = slow->next;
+            fast = fast->next;
+        }
+        return fast; // Start of the loop
+    }
 }
 
 int main()
@@ -34,7 +47,8 @@ int main()
     n5.next = &n2; // Creating Loop
     //
 
-    Floyd_detect_loop(head) ? cout << "Cycle Detected !" : cout << "Cycle Not Detected !";
+    Node *ptr = Floyd_detect_loop(head);
+    ptr == nullptr ? cout << "Cycle Not Detected !" : cout << "Cycle Detected ! Cycle Begins At : " << ptr->data;
 
     return 0;
 }
