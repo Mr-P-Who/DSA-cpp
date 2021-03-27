@@ -6,11 +6,10 @@ class Node
 public:
     int data;
     Node *left, *right;
-    Node(int d = 0)
+
+public:
+    Node(int d = 0) : data(d), left(nullptr), right(nullptr)
     {
-        data = d;
-        left = NULL;
-        right = NULL;
     }
 };
 
@@ -19,19 +18,118 @@ class BST
 public:
     Node *root;
 
-    BST() { root = NULL; }
+public:
+    BST() : root(nullptr)
+    {
+    }
 
-    bool empty() { return root == NULL; }
+    bool empty() { return root == nullptr; }
+
+    int height(Node *_root)
+    {
+        if (_root == nullptr)
+            return -1;
+        else
+        {
+            int left_height = height(_root->left);
+            int right_height = height(_root->right);
+            return left_height > right_height ? left_height + 1 : right_height + 1;
+        }
+    }
+
+    Node *minimum_node(Node *_root)
+    {
+        Node *temp = _root;
+        while (temp->left != nullptr)
+            temp = temp->left;
+        return temp;
+    }
+
+    Node *maximum_node(Node *_root)
+    {
+        Node *temp = _root;
+        while (temp->right != nullptr)
+            temp = temp->right;
+        return temp;
+    }
+
+    void print_preorder(Node *_root)
+    {
+        if (_root != nullptr)
+        {
+            cout << _root->data << " ";
+            print_preorder(_root->left);
+            print_preorder(_root->right);
+        }
+    }
+
+    void print_inorder(Node *_root)
+    {
+        if (_root != nullptr)
+        {
+            print_inorder(_root->left);
+            cout << _root->data << " ";
+            print_inorder(_root->right);
+        }
+    }
+
+    void print_postorder(Node *_root)
+    {
+        if (_root != nullptr)
+        {
+            print_postorder(_root->left);
+            print_postorder(_root->right);
+            cout << _root->data << " ";
+        }
+    }
+
+    void print_givenlevel(Node *_root, int level)
+    {
+        if (_root != nullptr)
+        {
+            if (level == 0)
+                cout << _root->data << " ";
+            else
+            {
+                print_givenlevel(_root->left, level - 1);
+                print_givenlevel(_root->right, level - 1);
+            }
+        }
+    }
+
+    void print_levelorder(Node *_root)
+    {
+        int h = height(_root);
+        for (int i = 0; i <= h; i++)
+        {
+            print_givenlevel(_root, i);
+        }
+    }
+
+    Node *search(const int &val)
+    {
+        Node *temp = root;
+        while (temp != nullptr)
+        {
+            if (val == temp->data)
+                break;
+            else if (val < temp->data)
+                temp = temp->left;
+            else
+                temp = temp->right;
+        }
+        return temp;
+    }
 
     // Iterative insert
     void insert(Node *new_node)
     {
-        if (root == NULL)
+        if (root == nullptr)
             root = new_node;
         else
         {
             Node *temp = root;
-            while (temp != NULL)
+            while (temp != nullptr)
             {
                 if (new_node->data == temp->data)
                 {
@@ -40,7 +138,7 @@ public:
                 }
                 else if (new_node->data < temp->data)
                 {
-                    if (temp->left == NULL)
+                    if (temp->left == nullptr)
                     {
                         temp->left = new_node;
                         break;
@@ -49,7 +147,7 @@ public:
                 }
                 else
                 {
-                    if (temp->right == NULL)
+                    if (temp->right == nullptr)
                     {
                         temp->right = new_node;
                         break;
@@ -63,7 +161,7 @@ public:
     // Recursive Insert // Method 1
     Node *insert(Node *new_node, Node *_root)
     {
-        if (_root == NULL)
+        if (_root == nullptr)
             return new_node;
         else if (new_node->data == _root->data)
             cout << "Duplicates Not Allowed !\n";
@@ -78,7 +176,7 @@ public:
     // Recursive Insert // Method 2
     void insert(Node *new_node, Node *&_root)
     {
-        if (_root == NULL)
+        if (_root == nullptr)
             _root = new_node;
         else if (new_node->data == _root->data)
             cout << "Duplicates Not Allowed !\n";
@@ -89,105 +187,9 @@ public:
     }
     */
 
-    void print_preorder(Node *_root)
-    {
-        if (_root != NULL)
-        {
-            cout << _root->data << " ";
-            print_preorder(_root->left);
-            print_preorder(_root->right);
-        }
-    }
-
-    void print_inorder(Node *_root)
-    {
-        if (_root != NULL)
-        {
-            print_inorder(_root->left);
-            cout << _root->data << " ";
-            print_inorder(_root->right);
-        }
-    }
-
-    void print_postorder(Node *_root)
-    {
-        if (_root != NULL)
-        {
-            print_postorder(_root->left);
-            print_postorder(_root->right);
-            cout << _root->data << " ";
-        }
-    }
-
-    int height(Node *_root)
-    {
-        if (_root == NULL)
-        {
-            return -1;
-        }
-        else
-        {
-            int left_height = height(_root->left), right_height = height(_root->right);
-            return left_height > right_height ? left_height + 1 : right_height + 1;
-        }
-    }
-
-    void print_givenlevel(Node *_root, int level)
-    {
-        if (_root != NULL)
-        {
-            if (level == 0)
-                cout << _root->data << " ";
-            else
-            {
-                print_givenlevel(_root->left, level - 1);
-                print_givenlevel(_root->right, level - 1);
-            }
-        }
-    }
-    void print_levelorder(Node *_root)
-    {
-        int h = height(_root);
-        for (int i = 0; i <= h; i++)
-        {
-            print_givenlevel(_root, i);
-        }
-    }
-
-    Node *search(int val)
-    {
-        Node *temp = root;
-        while (temp != NULL)
-        {
-            if (val == temp->data)
-                break;
-            else if (val < temp->data)
-                temp = temp->left;
-            else
-                temp = temp->right;
-        }
-        return temp;
-    }
-
-    Node *minimum_node(Node *_root)
-    {
-        Node *temp = _root;
-        while (temp->left != NULL)
-            temp = temp->left;
-        return temp;
-    }
-
-    Node *maximum_node(Node *_root)
-    {
-        Node *temp = _root;
-        while (temp->right != NULL)
-            temp = temp->right;
-        return temp;
-    }
-
     Node *delete_node(Node *_root, int val)
     {
-        if (_root == NULL) //Base Condition
+        if (_root == nullptr) //Base Condition
             return _root;
         else if (val < _root->data) // Value smaller then goto left subtree
             _root->left = delete_node(_root->left, val);
@@ -195,14 +197,14 @@ public:
             _root->right = delete_node(_root->right, val);
         else // Value Matches
         {
-            Node *temp = NULL;
-            if (_root->left == NULL) // Node with only right child OR No child
+            Node *temp = nullptr;
+            if (_root->left == nullptr) // Node with only right child OR No child
             {
                 temp = _root->right;
                 delete _root;
                 return temp;
             }
-            else if (_root->right == NULL) // Node with only left child
+            else if (_root->right == nullptr) // Node with only left child
             {
                 temp = _root->left;
                 delete _root;
@@ -247,8 +249,7 @@ int main()
             int val_2;
             cout << "Enter Value To Be Searched : ";
             cin >> val_2;
-            new_node = t1.search(val_2);
-            if (new_node != NULL)
+            if (!t1.empty() && t1.search(val_2) != nullptr)
                 cout << "Search Found ! ";
             else
                 cout << "Search Not Found !";
@@ -257,10 +258,10 @@ int main()
             int val_3;
             cout << "Enter Value To Be Deleted : ";
             cin >> val_3;
-            new_node = t1.search(val_3);
-            if (new_node != NULL)
+            new_node = t1.delete_node(t1.root, val_3);
+            if (new_node != nullptr)
             {
-                t1.delete_node(t1.root, val_3);
+                t1.root = new_node;
                 cout << "Search Found ! Value Deleted !";
             }
             else
