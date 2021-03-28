@@ -271,10 +271,9 @@ int main()
             int val_3;
             cout << "Enter Value To Be Deleted : ";
             cin >> val_3;
-            new_node = t1.delete_node(t1.root, val_3);
-            if (new_node != nullptr)
+            if (t1.search(val_3) != nullptr)
             {
-                t1.root = new_node;
+                t1.root = t1.delete_node(t1.root, val_3);
                 cout << "Search Found ! Value Deleted !";
             }
             else
