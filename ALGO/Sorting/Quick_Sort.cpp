@@ -1,22 +1,24 @@
 #include <iostream>
 using namespace std;
 
-int partition(int arr[], int s, int e)
+int partition(int arr[], int s, int e) // Hoare
 {
-    int pivot = e, low = s, high = e - 1;
+    int low = s - 1, high = e + 1, pivot = arr[(s + e) / 2];
     while (true)
     {
-        while (arr[low] < arr[pivot])
+        do
+        {
             ++low;
-        while (high != s && arr[high] > arr[pivot])
+        } while (arr[low] < pivot);
+        do
+        {
             --high;
+        } while (arr[high] > pivot);
         if (low >= high)
-            break;
+            return high;
         else
             swap(arr[low], arr[high]);
     }
-    swap(arr[low], arr[pivot]);
-    return low;
 }
 
 void quick_sort(int arr[], int start, int end)
@@ -32,24 +34,22 @@ void quick_sort(int arr[], int start, int end)
 template <class RandomAccessIterator>
 auto partition(RandomAccessIterator beg, RandomAccessIterator end)
 {
-    auto pivot = end - 1, low = beg, high = pivot - 1;
+    auto pivot = *beg, low = beg - 1, high = end + 1;
     while (true)
     {
-        while (*low < *pivot)
+        do
+        {
             ++low;
-        while (high != beg && *high > *pivot)
+        } while (*low < pivot);
+        do
+        {
             --high;
+        } while (*high > pivot);
         if (low >= high)
-        {
-            break;
-        }
+            return high;
         else
-        {
             swap(*low, *high);
-        }
     }
-    swap(*low, *pivot);
-    return low;
 }
 
 template <class RandomAccessIterator>
@@ -58,7 +58,7 @@ void quick_sort(RandomAccessIterator first, RandomAccessIterator last)
     if (first < last)
     {
         auto partition_point = partition(first, last);
-        quick_sort(first, partition_point - 1);
+        quick_sort(first, partition_point); // Using Hoare
         quick_sort(partition_point + 1, last);
     }
 }
