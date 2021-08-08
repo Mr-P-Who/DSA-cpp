@@ -26,40 +26,8 @@ void quick_sort(int arr[], int start, int end)
     if (start < end)
     {
         int p = partition(arr, start, end);
-        quick_sort(arr, start, p - 1);
+        quick_sort(arr, start, p); // Different Than Lomuto
         quick_sort(arr, p + 1, end);
-    }
-}
-
-template <class RandomAccessIterator>
-auto partition(RandomAccessIterator beg, RandomAccessIterator end)
-{
-    auto pivot = *beg, low = beg - 1, high = end + 1;
-    while (true)
-    {
-        do
-        {
-            ++low;
-        } while (*low < pivot);
-        do
-        {
-            --high;
-        } while (*high > pivot);
-        if (low >= high)
-            return high;
-        else
-            swap(*low, *high);
-    }
-}
-
-template <class RandomAccessIterator>
-void quick_sort(RandomAccessIterator first, RandomAccessIterator last)
-{
-    if (first < last)
-    {
-        auto partition_point = partition(first, last);
-        quick_sort(first, partition_point); // Using Hoare
-        quick_sort(partition_point + 1, last);
     }
 }
 
